@@ -1,0 +1,4 @@
+[submodule "secp256k1-zkp"]
+	path = secp256k1-zkp
+	url = https://github.com/Deus219/secp256k1-zkp.git
+	branch = schnorr-adaptor
