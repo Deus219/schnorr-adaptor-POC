@@ -24,18 +24,20 @@ extern "C" {
 /** Create a Schnorr pre-signature.
  *
  *  Returns 1 on success, 0 on failure.
- *  Args:      ctx: pointer to a context object, initialized for signing.
- *  Out: pre_sig64: pointer to a 64-byte array to store the serialized pre-signature.
- *  In:      msg32: the 32-byte message being signed.
- *         keypair: pointer to an initialized keypair.
- *         adaptor: pointer to an adaptor point encoded as a public key.
+ *  Args:        ctx: pointer to a context object, initialized for signing.
+ *  Out:   pre_sig64: pointer to a 64-byte array to store the serialized pre-signature.
+ *      nonce_parity: pointer to store the parity of final nonce.
+ *  In:        msg: the 32-byte message being signed.
+ *           keypair: pointer to an initialized keypair.
+ *           adaptor: pointer to an adaptor point encoded as a public key.
  */
 SECP256K1_API int secp256k1_schnorr_adaptor_sign(
     const secp256k1_context* ctx,
     unsigned char *pre_sig64,
     const unsigned char *msg,
     const secp256k1_keypair *keypair,
-    const secp256k1_pubkey *adaptor
+    const secp256k1_pubkey *adaptor,
+    int *nonce_parity
 ) SECP256K1_ARG_NONNULL(1) SECP256K1_ARG_NONNULL(2) SECP256K1_ARG_NONNULL(3) SECP256K1_ARG_NONNULL(4) SECP256K1_ARG_NONNULL(5);
 
 /** Verify a Schnorr pre-signature.
@@ -70,7 +72,7 @@ SECP256K1_API int secp256k1_schnorr_adaptor_adapt(
     unsigned char *sig64,
     const unsigned char *pre_sig64,
     const unsigned char *sec_adaptor32,
-    int *nonce_parity
+    int nonce_parity
 ) SECP256K1_ARG_NONNULL(1) SECP256K1_ARG_NONNULL(2) SECP256K1_ARG_NONNULL(3) SECP256K1_ARG_NONNULL(4);
 
 /** Extracts a secret adaptor from a Schnorr pre-signature and corresponding
@@ -88,7 +90,7 @@ SECP256K1_API int secp256k1_schnorr_adaptor_extract(
     unsigned char *sec_adaptor32,
     const unsigned char *sig64,
     const unsigned char *pre_sig64,
-    int *̣nonce_parity
+    int nonce_parity
 ) SECP256K1_ARG_NONNULL(1) SECP256K1_ARG_NONNULL(2) SECP256K1_ARG_NONNULL(3) SECP256K1_ARG_NONNULL(4);
 
 #ifdef __cplusplus
