@@ -10,8 +10,8 @@
 
 //---------|
 // This function takes in the nonce r(in jacobian coordinates) and performs point addition with adaptor point(in affine coordinates) and then finally serializes 
-// the tweaked nonce into a 32 byte array.
-static void secp256k1_schnorr_adaptor_tweak_nonce_and_serialize(unsigned char *fin_nonce, secp256k1_gej *rj, secp256k1_ge *adaptorp){
+// the tweaked nonce into a 32 byte array, also stores the parity of final nonce.
+static void secp256k1_schnorr_adaptor_tweak_nonce_process(unsigned char *fin_nonce, secp256k1_gej *rj, secp256k1_ge *adaptorp,int *nonce_parity){
     secp256k1_ge fin_nonce_pt;
     secp256k1_gej fin_nonce_ptj;
     // fin_nonce = R + T
@@ -23,15 +23,14 @@ static void secp256k1_schnorr_adaptor_tweak_nonce_and_serialize(unsigned char *f
     ret = secp256k1_xonly_ge_serialize(fin_nonce, &fin_nonce_pt);
     VERIFY_CHECK(ret);
 
-/** 
- *  Will, include this later after finding the most efficient way to store nonce_parity for the adapt and extract algorithms.
- *  secp256k1_fe_normalize_var(&fin_nonce_pt.y);
- *  *fin_nonce_parity = secp256k1_fe_is_odd(&fin_nonce_pt.y);
- */
+    if(nonce_parity != NULL){
+        secp256k1_fe_normalize_var(&fin_nonce_pt.y);
+        *nonce_parity = secp256k1_fe_is_odd(&fin_nonce_pt.y);
+    }
 }
 //---------||
 
-int secp256k1_schnorr_adaptor_sign(const secp256k1_context *ctx, unsigned char *pre_sig64, const unsigned char *msg, const secp256k1_keypair *keypair, const secp256k1_pubkey *adaptor){
+int secp256k1_schnorr_adaptor_sign(const secp256k1_context *ctx, unsigned char *pre_sig64, const unsigned char *msg, const secp256k1_keypair *keypair, const secp256k1_pubkey *adaptor, int *nonce_parity){
     secp256k1_scalar sk;
     secp256k1_scalar e;
     secp256k1_scalar k;
@@ -78,12 +77,8 @@ int secp256k1_schnorr_adaptor_sign(const secp256k1_context *ctx, unsigned char *
     secp256k1_ge_set_gej(&r, &rj);
 
     secp256k1_declassify(ctx, &r, sizeof(r));
-    secp256k1_fe_normalize_var(&r.y);
-    if (secp256k1_fe_is_odd(&r.y)){
-        secp256k1_scalar_negate(&k, &k);
-    }
-    secp256k1_fe_normalize_var(&r.x);
 
+    secp256k1_fe_normalize_var(&r.x);
     secp256k1_fe_get_b32(&pre_sig64[0], &r.x);
 
     //---------|
@@ -93,7 +88,17 @@ int secp256k1_schnorr_adaptor_sign(const secp256k1_context *ctx, unsigned char *
     }
 
     // Tweak the nonce rj with the adaptorp for the challenge part e := H(R+T||P||m) 
-    secp256k1_schnorr_adaptor_tweak_nonce_and_serialize(fin_nonce, &rj, &adaptorp);
+    secp256k1_schnorr_adaptor_tweak_nonce_process(fin_nonce, &rj, &adaptorp, nonce_parity);
+
+    //This is done in the context of normal schnorr signatures
+    // secp256k1_fe_normalize_var(&r.y);
+    // if (secp256k1_fe_is_odd(&r.y)){
+    //     secp256k1_scalar_negate(&k, &k);
+    // }
+    //But in the case of schnorr adaptor signatures, we negate k if (R+T) has odd ordinate.
+    if(nonce_parity){
+        secp256k1_scalar_negate(&k, &k);
+    }
 
     // Compute e := H(R+T||P||m)
     secp256k1_schnorrsig_challenge(&e, fin_nonce, msg, 32, pk_buf);
@@ -169,7 +174,7 @@ int secp256k1_schnorr_adaptor_verify(const secp256k1_context *ctx, const unsigne
     //Convert affine coordinates to jacobian to perform much precise point addition.
     secp256k1_gej_set_ge(&r1j,&r1);
     // Tweak the nonce rj with the adaptorp for the challenge part e := H(R+T||P||m) 
-    secp256k1_schnorr_adaptor_tweak_nonce_and_serialize(fin_nonce, &r1j, &adaptorp);
+    secp256k1_schnorr_adaptor_tweak_nonce_process(fin_nonce, &rj, &adaptorp, NULL);
 
     secp256k1_fe_get_b32(buf, &pk.x);
     //Compute e := H(R+T||P||m)
