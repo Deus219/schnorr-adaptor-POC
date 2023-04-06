@@ -5,7 +5,7 @@
 #include "../../../include/secp256k1_schnorrsig.h"
 #include "../../hash.h"
 
-#include "../../../include/secp256k1_schnorr_adaptor.h"
+#include "schnorr_adaptor.h"
 
 
 //---------|
