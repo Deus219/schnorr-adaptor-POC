@@ -131,3 +131,19 @@ Steps:
 10. Convert the resulting scalar `t` to a 32-byte buffer and store it in `sec_adaptor32` using `secp256k1_scalar_get_b32`.
 11. Clear the scalar `t` using `secp256k1_scalar_clear`.
 12. Return `ret`.
+
+## Correctness and Security
+
+Mathematical formulations and proofs behind schnorr adaptor signatur's correctness and security definitions such as aEU-CMF, pre-signature adaptability and witness extractability can be found [here](https://eprint.iacr.org/2020/476.pdf) - a research paper titled “Generalized Channels from Limited Blockchain Scripts and Adaptor Signatures” published in 2020 under International Association for Cryptologic Research (IACR).
+
+## Checklist
+
+Figure out the following things before the final implementation:
+
+- [ ] Make sure all the nonce and hash related functions are included
+- [ ] Extend support to variable length messages
+- [ ] Refine and standardize `teak_nonce_process` 
+- [ ] `xonly_ge_serialize` is included or implemented again
+- [ ] Efficient way to store `nonce_parity`
+- [ ] All the liberties taken during this poc implementation are validated
+
