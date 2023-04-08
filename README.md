@@ -142,7 +142,7 @@ Figure out the following things before the final implementation:
 
 - [ ] Make sure all the nonce and hash related functions are included
 - [ ] Extend support to variable length messages
-- [ ] Refine and standardize `teak_nonce_process` 
+- [ ] Refine and standardize `tweak_nonce_process` 
 - [ ] `xonly_ge_serialize` is included or implemented again
 - [ ] Efficient way to store `nonce_parity`
 - [ ] All the liberties taken during this poc implementation are validated
