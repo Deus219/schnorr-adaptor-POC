@@ -4,9 +4,20 @@ This repository contains a proof of concept implementation of the Schnorr Adapto
 
 **Note**: Although I made an effort to match this module's design as closely as possible to the secp256k1-zkp repo, I had to make a few adjustments to streamline this poc's implementation. The final implementation will certainly fix all those minor design flaws.
 
+:link: Link to my proposal - [here](https://deus21.notion.site/BIP-340-Adaptor-Signatures-Module-Proposal-bbe281be19604cdabf30dc6ea7431bd9)
+
 ## Schnorr Adaptor Signatures
 
-### Generate:
+As discussed in my [proposal](https://www.notion.so/deus21/BIP-340-Adaptor-Signatures-Module-Proposal-bbe281be19604cdabf30dc6ea7431bd9?pvs=4#3b28958c3f614735bfcab41b66bc72a5), this module aims to implement four fundamental algorithms in the schnorr adaptor signature scheme:
+
+- [Sign](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#sign)
+- [Verify](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#verify)
+- [Adapt](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#adapt)
+- [Extract](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#extract)
+
+Working description of the proposed APIs:
+
+### Sign:
 
 The pre-signing algorithm of `schnorr_adaptor_sign` can be described as:
 
