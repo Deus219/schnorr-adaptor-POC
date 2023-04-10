@@ -10,10 +10,10 @@ This repository contains a proof of concept implementation of the Schnorr Adapto
 
 As discussed in my [proposal](https://www.notion.so/deus21/BIP-340-Adaptor-Signatures-Module-Proposal-bbe281be19604cdabf30dc6ea7431bd9?pvs=4#3b28958c3f614735bfcab41b66bc72a5), this module aims to implement four fundamental algorithms in the schnorr adaptor signature scheme:
 
-- [Sign](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#sign)
-- [Verify](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#verify)
-- [Adapt](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#adapt)
-- [Extract](https://github.com/Deus219/schnorr-adaptor-POC/edit/main/README.md#extract)
+- [Sign](https://github.com/Deus219/schnorr-adaptor-POC#sign)
+- [Verify](https://github.com/Deus219/schnorr-adaptor-POC#verify)
+- [Adapt](https://github.com/Deus219/schnorr-adaptor-POC#adapt)
+- [Extract](https://github.com/Deus219/schnorr-adaptor-POC#extract)
 
 Working description of the proposed APIs:
 
