@@ -17,7 +17,7 @@
 
 /** This function takes in the nonce r(in jacobian coordinates) and performs point addition with adaptor point(in affine coordinates) and then finally serializes 
  *  the tweaked nonce into a 32 byte array, also stores the parity of final nonce.
- *  xonly_ge_serialize is already implemented in musig module(https://github.com/BlockstreamResearch/secp256k1-zkp/tree/master/src/modules/musig/session_impl.h#L220).
+ *  xonly_ge_serialize is already implemented in musig module(https://github.com/BlockstreamResearch/secp256k1-zkp/blob/6ec1ff6040164cbc3fafb665e28449870e6a9113/src/modules/musig/session_impl.h#L288).
  *  This function still needs to be standardized.
  */
 static void secp256k1_schnorr_adaptor_tweak_nonce_process(unsigned char *fin_nonce, secp256k1_gej *rj, secp256k1_ge *adaptorp,int *nonce_parity){
