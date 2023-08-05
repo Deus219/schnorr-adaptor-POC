@@ -172,9 +172,10 @@ int secp256k1_schnorr_adaptor_verify(const secp256k1_context *ctx, const unsigne
     secp256k1_schnorr_adaptor_tweak_nonce_process(fin_nonce, &r1j, &adaptorp, NULL);
 
     secp256k1_fe_get_b32(buf, &pk.x);
-    //Compute e := H(R+T||P||m)
+    // Compute e := H(R+T||P||m)
     secp256k1_schnorrsig_challenge(&e, fin_nonce, msg, 32, buf);
 
+    // Compute rj =  s*G + (-e)*pkj
     secp256k1_scalar_negate(&e, &e);
     secp256k1_gej_set_ge(&pkj, &pk);
     secp256k1_ecmult(&rj, &pkj, &e, &s);
