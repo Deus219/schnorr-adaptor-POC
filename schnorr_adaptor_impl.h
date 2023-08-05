@@ -169,7 +169,7 @@ int secp256k1_schnorr_adaptor_verify(const secp256k1_context *ctx, const unsigne
     // Convert affine coordinates to jacobian to perform much precise point addition.
     secp256k1_gej_set_ge(&r1j,&r1);
     // Tweak the nonce rj with the adaptorp for the challenge part e := H(R+T||P||m) 
-    secp256k1_schnorr_adaptor_tweak_nonce_process(fin_nonce, &rj, &adaptorp, NULL);
+    secp256k1_schnorr_adaptor_tweak_nonce_process(fin_nonce, &r1j, &adaptorp, NULL);
 
     secp256k1_fe_get_b32(buf, &pk.x);
     //Compute e := H(R+T||P||m)
